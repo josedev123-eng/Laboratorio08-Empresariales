@@ -1,11 +1,28 @@
 """Build the Lab08 deliverable as a Word document with the real API table."""
+import os
+
 from docx import Document
-from docx.shared import Pt, RGBColor
+from docx.shared import Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
+
+CAPTURAS = os.path.join("docs", "capturas")
 
 
 def heading(doc, text, level=1):
     doc.add_heading(text, level=level)
+
+
+def captura(doc, filename, caption):
+    """Insert a screenshot centered, followed by an italic caption."""
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p.add_run().add_picture(os.path.join(CAPTURAS, filename), width=Inches(6.2))
+    cap = doc.add_paragraph()
+    cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    run = cap.add_run(caption)
+    run.italic = True
+    run.font.size = Pt(9)
+    return cap
 
 
 def para(doc, text, bold=False):
@@ -173,7 +190,101 @@ for row in errs[1:]:
     for i, value in enumerate(row):
         cells[i].text = value
 
-heading(doc, "8. Relaciones: como viajan los datos", 1)
+heading(doc, "8. Capturas de pantalla de la API", 1)
+para(
+    doc,
+    "Todas las capturas se tomaron directamente del servidor real en "
+    "http://127.0.0.1:8000, sobre la API navegable de Django REST Framework. "
+    "Cada imagen muestra el codigo de estado HTTP devuelto en ese momento.",
+)
+
+heading(doc, "8.1 Raiz de la API - GET /quiz/ (200 OK)", 2)
+captura(
+    doc,
+    "01_api_root.png",
+    "Figura 1. Raiz de la API con los enlaces a exams, questions y choices.",
+)
+
+heading(doc, "8.2 Listado de examenes - GET /quiz/exams/ (200 OK)", 2)
+captura(
+    doc,
+    "02_exams_list.png",
+    "Figura 2. Listado paginado de examenes.",
+)
+
+heading(doc, "8.3 Listado de preguntas - GET /quiz/questions/ (200 OK)", 2)
+captura(
+    doc,
+    "03_questions_list.png",
+    "Figura 3. Preguntas con sus opciones anidadas.",
+)
+
+heading(doc, "8.4 Listado de opciones - GET /quiz/choices/ (200 OK)", 2)
+captura(
+    doc,
+    "04_choices_list.png",
+    "Figura 4. Listado de opciones de respuesta.",
+)
+
+heading(doc, "8.5 Detalle de un examen - GET /quiz/exams/4/ (200 OK)", 2)
+captura(
+    doc,
+    "05_exam_detail.png",
+    "Figura 5. Detalle del examen con preguntas y opciones anidadas.",
+)
+
+heading(doc, "8.6 Busqueda por texto - GET /quiz/questions/?search=Python (200 OK)", 2)
+captura(
+    doc,
+    "06_search_python.png",
+    "Figura 6. Filtrado de preguntas por el texto 'Python'.",
+)
+
+heading(doc, "8.7 Paginacion - GET /quiz/exams/?page=1 (200 OK)", 2)
+captura(
+    doc,
+    "07_pagination.png",
+    "Figura 7. Respuesta paginada con count, next, previous y results.",
+)
+
+heading(doc, "8.8 Error 400 - campo obligatorio ausente", 2)
+para(
+    doc,
+    "Se envio un examen sin el campo title. La API responde 400 Bad Request "
+    "con el mensaje 'This field is required.'",
+)
+captura(
+    doc,
+    "08_error_missing_title.png",
+    "Figura 8. Error 400 por campo obligatorio ausente.",
+)
+
+heading(doc, "8.9 Error 400 - tipo de dato incorrecto", 2)
+para(
+    doc,
+    "Se envio title como objeto en lugar de cadena. La API responde 400 Bad "
+    "Request con el mensaje 'Not a valid string.'",
+)
+captura(
+    doc,
+    "09_error_wrong_type.png",
+    "Figura 9. Error 400 por tipo de dato incorrecto.",
+)
+
+heading(doc, "8.10 Error 400 - pregunta sin exactamente una opcion correcta", 2)
+para(
+    doc,
+    "Se envio una pregunta con dos opciones marcadas como correctas. La "
+    "validacion propia responde 400 Bad Request con el mensaje "
+    "'Exactly one choice must be marked as correct.'",
+)
+captura(
+    doc,
+    "10_error_two_correct.png",
+    "Figura 10. Error 400 por no tener exactamente una opcion correcta.",
+)
+
+heading(doc, "9. Relaciones: como viajan los datos", 1)
 para(
     doc,
     "- Las opciones (Choice) viajan ANIDADAS dentro de la pregunta (Question.choices).\n"
@@ -181,7 +292,7 @@ para(
     "- El detalle de un examen incluye sus preguntas anidadas y, dentro de cada una, sus opciones.",
 )
 
-heading(doc, "9. Conclusiones", 1)
+heading(doc, "10. Conclusiones", 1)
 para(
     doc,
     "1. Django REST Framework permite exponer los modelos como servicio web con muy poco "
