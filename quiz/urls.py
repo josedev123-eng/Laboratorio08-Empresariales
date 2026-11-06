@@ -1,14 +1,9 @@
-from django.urls import path
-from . import views
+from rest_framework.routers import DefaultRouter
+from .views import ExamViewSet, QuestionViewSet, ChoiceViewSet
 
-app_name = "quiz"
+router = DefaultRouter()
+router.register(r'exams', ExamViewSet)
+router.register(r'questions', QuestionViewSet)
+router.register(r'choices', ChoiceViewSet)
 
-urlpatterns = [
-    path("", views.exam_list, name="exam_list"),
-    path("exam/<int:pk>/", views.exam_detail, name="exam_detail"),
-    path(
-        "exam/<int:exam_pk>/question/create/",
-        views.question_create,
-        name="question_create",
-    ),
-]
+urlpatterns = router.urls
