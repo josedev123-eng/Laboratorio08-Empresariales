@@ -34,9 +34,26 @@ Base URL: `http://127.0.0.1:8000`
 
 ## Filtrado y paginacion
 
+- Filtrado por examen: `/quiz/questions/?exam=6`
 - Busqueda por enunciado: `/quiz/questions/?search=Python`
 - Busqueda de examenes por titulo: `/quiz/exams/?search=Sample`
-- Paginacion: `/quiz/exams/?page=1` (PAGE_SIZE = 10)
+- Paginacion: `/quiz/exams/?page=1` y `/quiz/exams/?page=2` (PAGE_SIZE = 10; con mas de
+  10 examenes la respuesta incluye `next` y `previous`)
+
+## Estructura del proyecto
+
+```
+src/
+  config/        settings.py, urls.py, wsgi.py, asgi.py
+  quiz/          models.py, serializers.py, views.py, urls.py, migrations/
+  docs/          capturas/ (evidencias del laboratorio), lab08_api.md
+  templates/     plantillas de la aplicacion
+  library/       aplicacion de biblioteca del curso
+  media/         archivos subidos
+  movies/        aplicacion de peliculas del curso
+  news/          aplicacion de noticias del curso
+  manage.py      punto de entrada de Django
+```
 
 ## Configuracion
 

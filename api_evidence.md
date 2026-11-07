@@ -428,7 +428,7 @@
 - **Response:**
 ```json
 {
-  "count": 2,
+  "count": 1,
   "next": null,
   "previous": null,
   "results": [
@@ -456,34 +456,6 @@
         {
           "id": 8,
           "text": "A type of data",
-          "is_correct": false
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "statement": "Which keyword creates a function?",
-      "exam": 4,
-      "score": 3,
-      "choices": [
-        {
-          "id": 9,
-          "text": "def",
-          "is_correct": true
-        },
-        {
-          "id": 10,
-          "text": "function",
-          "is_correct": false
-        },
-        {
-          "id": 11,
-          "text": "import",
-          "is_correct": false
-        },
-        {
-          "id": 12,
-          "text": "class",
           "is_correct": false
         }
       ]
@@ -565,6 +537,50 @@
               "is_correct": false
             }
           ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+## 17. Filter questions by exam
+- **Method:** GET
+- **URL:** http://127.0.0.1:8000/quiz/questions/?exam=6
+- **Expected status:** 200
+- **Actual status:** 200
+- **Response:**
+```json
+{
+  "count": 1,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 5,
+      "statement": "¿En qué lenguaje está escrito Django?",
+      "exam": 6,
+      "score": 1,
+      "choices": [
+        {
+          "id": 17,
+          "text": "Python",
+          "is_correct": true
+        },
+        {
+          "id": 18,
+          "text": "Java",
+          "is_correct": false
+        },
+        {
+          "id": 19,
+          "text": "PHP",
+          "is_correct": false
+        },
+        {
+          "id": 20,
+          "text": "C#",
+          "is_correct": false
         }
       ]
     }
