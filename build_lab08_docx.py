@@ -4,6 +4,7 @@ import os
 from docx import Document
 from docx.shared import Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
+from PIL import Image
 
 CAPTURAS = os.path.join("docs", "capturas")
 
@@ -14,9 +15,17 @@ def heading(doc, text, level=1):
 
 def captura(doc, filename, caption):
     """Insert a screenshot centered, followed by an italic caption."""
+    path = os.path.join(CAPTURAS, filename)
+    with Image.open(path) as image:
+        width_px, height_px = image.size
+
+    width_in = 6.2
+    if width_in * height_px / width_px > 8.0:
+        width_in = 8.0 * width_px / height_px
+
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    p.add_run().add_picture(os.path.join(CAPTURAS, filename), width=Inches(6.2))
+    p.add_run().add_picture(path, width=Inches(width_in))
     cap = doc.add_paragraph()
     cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
     run = cap.add_run(caption)
